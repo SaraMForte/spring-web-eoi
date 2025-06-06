@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        html, body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            align-content: center;
+            text-align: center;
+        }
+
+        table {
+            border-collapse: collapse;
+            margin: 0 5%;
+            font-family: Arial, sans-serif;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            text-align: center;
+        }
+
+        tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        .copiable:hover {
+            background-color: #dcdcdc;
+        }
+
+        #my-popover {
+            padding: 10px 15px;
+            background-color: #4caf50;
+            color: white;
+            border-radius: 6px;
+            font-size: 14px;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 9999;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+<h1>Lista de datos básicos de las Oficinas</h1>
+
+<table>
+
+    <thead>
+    <tr>
+        <th>Código Oficina</th>
+        <th>Ciudad</th>
+        <th>Teléfono</th>
+        <th>Linea Dirección 1</th>
+        <th>Linea Dirección 2</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr th:each="oficina : ${oficinaBasicAddress}">
+        <td class="copiable" onclick="copiarTexto(this)" th:text="${oficina.codigo_oficina()}"></td>
+        <td class="copiable" onclick="copiarTexto(this)" th:text="${oficina.ciudad()}"></td>
+        <td class="copiable" onclick="copiarTexto(this)" th:text="${oficina.telefono()}"></td>
+        <td class="copiable" onclick="copiarTexto(this)" th:text="${oficina.linea_direccion1()}"></td>
+        <td class="copiable" onclick="copiarTexto(this)" th:text="${oficina.linea_direccion2()}"></td>
+    </tr>
+    </tbody>
+
+    <div id="my-popover" popover>
+        ¡Texto copiado al portapapeles!
+    </div>
+
+</table>
+<script>
+    function copiarTexto(elemento) {
+        const texto = elemento.textContent;
+        navigator.clipboard.writeText(texto)
+            .then(() => {
+                const popover = document.getElementById('my-popover');
+                popover.showPopover();
+
+                setTimeout(() => {
+                    popover.hidePopover();
+                }, 1500);
+            })
+            .catch(err => {
+                console.error("Error al copiar: ", err);
+            });
+    }
+</script>
+</body>
+</html>
