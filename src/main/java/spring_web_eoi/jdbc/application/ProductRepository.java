@@ -11,4 +11,6 @@ public interface ProductRepository {
     Product findProductById(String id);
 
     void saveProduct(Product product);
+
+    void updateProduct(Product product);
 }

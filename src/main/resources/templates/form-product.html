@@ -93,9 +93,13 @@
 </head>
 <body>
 <div class="container">
-    <h2>Formulario de Producto</h2>
+    <h2 th:text="${product.isEmpty()} ? 'Registar Producto' : 'Editar Producto'">Formulario de Producto</h2>
+    <span th:text="'Texto recibido: ' + ${id}"></span>
 
-    <form method="post" action="/form/product" th:object="${product}">
+    <form method="post"
+          th:if="${id != null}"
+          th:action="@{/form/product/{id}(id=${id})}"
+          th:object="${product}">
         <div class="form-group">
             <label th:for="*{codigoProducto}">Código del Producto</label>
             <input type="text" th:field="*{codigoProducto}" required />
@@ -146,7 +150,59 @@
         </div>
     </form>
 
+    <form method="post"
+          th:if="${id == null}"
+          th:action="@{/form/product}"
+          th:object="${product}">
+        <div class="form-group">
+            <label th:for="*{codigoProducto}">Código del Producto</label>
+            <input type="text" th:field="*{codigoProducto}" required />
+        </div>
 
+        <div class="form-group">
+            <label th:for="*{nombre}">Nombre</label>
+            <input type="text" th:field="*{nombre}" required />
+        </div>
+
+        <div class="form-group">
+            <label th:for="*{gama}">Gama</label>
+            <input type="text" th:field="*{gama}" />
+        </div>
+
+        <div class="form-group">
+            <label th:for="*{dimensiones}">Dimensiones</label>
+            <input type="text" th:field="*{dimensiones}" />
+        </div>
+
+        <div class="form-group">
+            <label th:for="*{proveedor}">Proveedor</label>
+            <input type="text" th:field="*{proveedor}" />
+        </div>
+
+        <div class="form-group full-width">
+            <label th:for="*{descripcion}">Descripción</label>
+            <textarea th:field="*{descripcion}" rows="3"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label th:for="*{cantidadEnStock}">Cantidad en Stock</label>
+            <input type="number" th:field="*{cantidadEnStock}" required />
+        </div>
+
+        <div class="form-group">
+            <label th:for="*{precioVenta}">Precio de Venta</label>
+            <input type="number" step="0.01" th:field="*{precioVenta}" required />
+        </div>
+
+        <div class="form-group">
+            <label th:for="*{precioProveedor}">Precio del Proveedor</label>
+            <input type="number" step="0.01" th:field="*{precioProveedor}" required />
+        </div>
+
+        <div class="form-actions">
+            <button type="submit">Guardar Producto</button>
+        </div>
+    </form>
 </div>
 </body>
 </html>

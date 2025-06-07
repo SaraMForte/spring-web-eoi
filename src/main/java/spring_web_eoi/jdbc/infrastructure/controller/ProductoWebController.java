@@ -46,7 +46,8 @@ public class ProductoWebController {
 
     @GetMapping("/form/product")
     public String formProducto(Model model) {
-        model.addAttribute("product", null);
+        model.addAttribute("product", new ProductoDTO());
+        model.addAttribute("id", null);
         return "form-product";
     }
 
@@ -54,15 +55,30 @@ public class ProductoWebController {
     public String formProducto(@PathVariable("id") String id, Model model) {
         ProductoDTO producto = ProductoDTO.fromDomain(productService.findProductById(id));
         model.addAttribute("product", producto);
+        model.addAttribute("id", id);
         return "form-product";
     }
 
+    @PostMapping("/form/product/{id}")
+    public String updateProduct(
+            @ModelAttribute("product") ProductoDTO producto,
+            @PathVariable("id") String id,
+            Model model
+    ) {
+        productService.updateProduct(producto.toDomain());
+
+        List<ProductoDTO> productos = new ArrayList<>();
+        productos.add(producto);
+        model.addAttribute("table", new GenericTableGenerator<>(productos, ProductoDTO.class));
+        return "index-generic";
+    }
+
     @PostMapping("/form/product")
-    public String saveProduct(@ModelAttribute("form") ProductoDTO form, Model model) {
+    public String saveProduct(@ModelAttribute("form") ProductoDTO producto, Model model) {
 
-        productService.saveProduct(form.toDomain());
+        productService.saveProduct(producto.toDomain());
 
-        ProductoDTO findProduct = ProductoDTO.fromDomain(productService.findProductById(form.getCodigoProducto()));
+        ProductoDTO findProduct = ProductoDTO.fromDomain(productService.findProductById(producto.getCodigoProducto()));
         List<ProductoDTO> productoDTO = new ArrayList<>();
         productoDTO.add(findProduct);
 

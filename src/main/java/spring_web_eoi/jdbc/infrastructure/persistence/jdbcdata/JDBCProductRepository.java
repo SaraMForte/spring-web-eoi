@@ -5,7 +5,6 @@ import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.context.request.NativeWebRequest;
 import spring_web_eoi.jdbc.application.ProductRepository;
 import spring_web_eoi.jdbc.domain.Product;
 import spring_web_eoi.jdbc.infrastructure.persistence.jdbcdata.model.ProductoJDBC;
@@ -85,4 +84,22 @@ public interface JDBCProductRepository extends ListCrudRepository<ProductoJDBC, 
                     )
             """)
     void saveProduct(@Param("product") Product product);
+
+    @Override
+    @Modifying
+    @Query("""
+            UPDATE producto
+            SET
+                nombre = :#{#product.name},
+                gama = :#{#product.productLine},
+                dimensiones = :#{#product.dimensions},
+                proveedor = :#{#product.supplier},
+                descripcion = :#{#product.description},
+                cantidad_en_stock = :#{#product.quantityInStock},
+                precio_venta = :#{#product.salePrice},
+                precio_proveedor = :#{#product.supplierPrice}
+            WHERE
+                codigo_producto = :#{#product.productCode}
+            """)
+    void updateProduct(Product product);
 }

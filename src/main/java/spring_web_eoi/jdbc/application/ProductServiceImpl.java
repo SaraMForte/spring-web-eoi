@@ -28,4 +28,8 @@ public class ProductServiceImpl implements ProductService {
     public void saveProduct(Product product) {
         productRepository.saveProduct(product);
     }
+
+    public void updateProduct(Product product) {
+        productRepository.updateProduct(product);
+    }
 }

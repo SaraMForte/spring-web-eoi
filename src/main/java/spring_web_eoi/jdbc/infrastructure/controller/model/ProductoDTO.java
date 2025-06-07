@@ -41,6 +41,10 @@ public class ProductoDTO {
         return product;
     }
 
+    public boolean isEmpty() {
+        return codigoProducto == null || nombre == null || gama == null || dimensiones == null || proveedor == null || descripcion == null;
+    }
+
     @Override
     public String toString() {
         return "ProductoDTO{" +

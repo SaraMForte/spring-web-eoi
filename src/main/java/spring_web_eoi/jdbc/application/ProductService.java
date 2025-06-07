@@ -10,4 +10,6 @@ public interface ProductService {
     Product findProductById(String id);
 
     void saveProduct(Product product);
+
+    void updateProduct(Product product);
 }
