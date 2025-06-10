@@ -2,16 +2,15 @@ package spring_web_eoi.jdbc.infrastructure.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import spring_web_eoi.jdbc.application.ProductService;
+import spring_web_eoi.jdbc.domain.Product;
 import spring_web_eoi.jdbc.infrastructure.controller.model.ProductoDTO;
 import spring_web_eoi.jdbc.infrastructure.util.GenericTableGenerator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class ProductoWebController {
@@ -20,17 +19,6 @@ public class ProductoWebController {
 
     public ProductoWebController(ProductService productService) {
         this.productService = productService;
-    }
-
-    @GetMapping("/generic/product")
-    public String genericProducto(Model model) {
-        List<ProductoDTO> productos = productService.findAllProducts()
-                .stream()
-                .map(ProductoDTO::fromDomain)
-                .toList();
-
-        model.addAttribute("table", new GenericTableGenerator<>(productos, ProductoDTO.class));
-        return "index-generic";
     }
 
     @GetMapping("/generic/product-all")
@@ -53,7 +41,12 @@ public class ProductoWebController {
 
     @GetMapping("/form/product/{id}")
     public String formProducto(@PathVariable("id") String id, Model model) {
-        ProductoDTO producto = ProductoDTO.fromDomain(productService.findProductById(id));
+        Optional<Product> productFind = productService.findProductById(id);
+        if (productFind.isEmpty()) {
+            return "redirect:/generic/product-all";
+        }
+
+        ProductoDTO producto = ProductoDTO.fromDomain(productFind.get());
         model.addAttribute("product", producto);
         model.addAttribute("id", id);
         return "form-product";
@@ -75,10 +68,14 @@ public class ProductoWebController {
 
     @PostMapping("/form/product")
     public String saveProduct(@ModelAttribute("form") ProductoDTO producto, Model model) {
-
         productService.saveProduct(producto.toDomain());
 
-        ProductoDTO findProduct = ProductoDTO.fromDomain(productService.findProductById(producto.getCodigoProducto()));
+        Optional<Product> productFind = productService.findProductById(producto.getCodigoProducto());
+        if (productFind.isEmpty()) {
+            return "redirect:/generic/product-all";
+        }
+
+        ProductoDTO findProduct = ProductoDTO.fromDomain(productFind.get());
         List<ProductoDTO> productoDTO = new ArrayList<>();
         productoDTO.add(findProduct);
 

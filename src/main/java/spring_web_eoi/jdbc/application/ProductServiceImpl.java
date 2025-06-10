@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import spring_web_eoi.jdbc.domain.Product;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -20,8 +21,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product findProductById(String id) {
-        return productRepository.findProductById(id);
+    public Optional<Product> findProductById(String id) {
+        return Optional.ofNullable(productRepository.findProductById(id));
     }
 
     @Override
