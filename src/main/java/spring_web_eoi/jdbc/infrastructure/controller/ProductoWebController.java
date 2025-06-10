@@ -23,18 +23,19 @@ public class ProductoWebController {
     }
 
     @GetMapping("/generic/product-all")
-    public String genericProductoAll(Model model) {
+    public String genericProducto(Model model) {
         List<ProductoDTO> productos = productService.findAllProducts()
                 .stream()
                 .map(ProductoDTO::fromDomain)
                 .toList();
 
         model.addAttribute("table", new GenericTableGenerator<>(productos, ProductoDTO.class));
+        model.addAttribute("formUrl", "/form/product/");
         return "index-generic";
     }
 
     @GetMapping("generic/product")
-    public String genericProducto(@RequestParam(value = "id") String id, Model model) {
+    public String genericProductoById(@RequestParam(value = "id") String id, Model model) {
         Optional<Product> productFind = productService.findProductById(id);
         if (productFind.isEmpty()) {
             return "redirect:/generic/product-all";
@@ -43,6 +44,7 @@ public class ProductoWebController {
         List<ProductoDTO> productos = new ArrayList<>();
         productos.add(ProductoDTO.fromDomain(productFind.get()));
         model.addAttribute("table", new GenericTableGenerator<>(productos, ProductoDTO.class));
+        model.addAttribute("formUrl", "/form/product/");
         return "index-generic";
     }
 
