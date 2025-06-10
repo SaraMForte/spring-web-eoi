@@ -104,6 +104,16 @@
             border-color: #f5c2c7;
         }
 
+        .alert-success {
+            color: #155724;
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+
+            > a {
+                margin: 0.25rem;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -113,6 +123,10 @@
 
     <div th:if="${product.isEmpty() && id != null}" class="alert alert-danger" role="alert">
         No existe el producto con el id: <b th:text="${id}"></b>
+    </div>
+
+    <div th:if="${successMessage}" class="alert alert-success" role="alert">
+        <span th:text="${successMessage}"></span><a th:href="${successLink}">Ver</a>
     </div>
 
     <form method="post"

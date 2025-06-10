@@ -3,6 +3,7 @@ package spring_web_eoi.jdbc.infrastructure.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import spring_web_eoi.jdbc.application.ProductService;
 import spring_web_eoi.jdbc.domain.Product;
 import spring_web_eoi.jdbc.infrastructure.controller.model.ProductoDTO;
@@ -28,6 +29,19 @@ public class ProductoWebController {
                 .map(ProductoDTO::fromDomain)
                 .toList();
 
+        model.addAttribute("table", new GenericTableGenerator<>(productos, ProductoDTO.class));
+        return "index-generic";
+    }
+
+    @GetMapping("generic/product")
+    public String genericProducto(@RequestParam(value = "id") String id, Model model) {
+        Optional<Product> productFind = productService.findProductById(id);
+        if (productFind.isEmpty()) {
+            return "redirect:/generic/product-all";
+        }
+
+        List<ProductoDTO> productos = new ArrayList<>();
+        productos.add(ProductoDTO.fromDomain(productFind.get()));
         model.addAttribute("table", new GenericTableGenerator<>(productos, ProductoDTO.class));
         return "index-generic";
     }
@@ -58,18 +72,20 @@ public class ProductoWebController {
     public String updateProduct(
             @ModelAttribute("product") ProductoDTO producto,
             @PathVariable("id") String id,
-            Model model
+            RedirectAttributes redirectAttributes
     ) {
         productService.updateProduct(producto.toDomain());
 
-        List<ProductoDTO> productos = new ArrayList<>();
-        productos.add(producto);
-        model.addAttribute("table", new GenericTableGenerator<>(productos, ProductoDTO.class));
-        return "index-generic";
+        redirectAttributes.addFlashAttribute("successMessage", "Producto actualizado con exito -> ");
+        redirectAttributes.addFlashAttribute("successLink", "/generic/product?id=" + producto.getCodigoProducto());
+        return "redirect:/form/product/" + id;
     }
 
     @PostMapping("/form/product")
-    public String saveProduct(@ModelAttribute("form") ProductoDTO producto, Model model) {
+    public String saveProduct(
+            @ModelAttribute("product") ProductoDTO producto,
+            RedirectAttributes redirectAttributes
+    ) {
         productService.saveProduct(producto.toDomain());
 
         Optional<Product> productFind = productService.findProductById(producto.getCodigoProducto());
@@ -77,11 +93,8 @@ public class ProductoWebController {
             return "redirect:/generic/product-all";
         }
 
-        ProductoDTO findProduct = ProductoDTO.fromDomain(productFind.get());
-        List<ProductoDTO> productoDTO = new ArrayList<>();
-        productoDTO.add(findProduct);
-
-        model.addAttribute("table", new GenericTableGenerator<>(productoDTO, ProductoDTO.class));
-        return "index-generic";
+        redirectAttributes.addFlashAttribute("successMessage", "Producto guardado con exito -> ");
+        redirectAttributes.addFlashAttribute("successLink", "/generic/product?id=" + producto.getCodigoProducto());
+        return "redirect:/form/product/" + producto.getCodigoProducto();
     }
 }
