@@ -43,7 +43,9 @@ public class ProductoWebController {
     public String formProducto(@PathVariable("id") String id, Model model) {
         Optional<Product> productFind = productService.findProductById(id);
         if (productFind.isEmpty()) {
-            return "redirect:/generic/product-all";
+            model.addAttribute("product", new ProductoDTO());
+            model.addAttribute("id", id);
+            return "form-product";
         }
 
         ProductoDTO producto = ProductoDTO.fromDomain(productFind.get());
