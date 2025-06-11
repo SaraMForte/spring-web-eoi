@@ -1,6 +1,6 @@
 package spring_web_eoi.jdbc.infrastructure.controller;
 
-import spring_web_eoi.jdbc.application.OfficeServiceImpl;
+import spring_web_eoi.jdbc.application.OfficeService;
 import spring_web_eoi.jdbc.domain.Office;
 import spring_web_eoi.jdbc.infrastructure.controller.model.OficinaBasicAddressDTO;
 
@@ -8,9 +8,9 @@ import java.util.List;
 
 public class OficinaController {
 
-    OfficeServiceImpl officeService;
+    OfficeService officeService;
 
-    public OficinaController(OfficeServiceImpl officeService) {
+    public OficinaController(OfficeService officeService) {
         this.officeService = officeService;
     }
 

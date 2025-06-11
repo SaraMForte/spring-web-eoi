@@ -4,6 +4,15 @@ import spring_web_eoi.jdbc.domain.Office;
 
 import java.util.List;
 
-public interface OfficeService {
-    List<Office> findBasicAddress();
+public class OfficeService {
+
+    private OfficeRepository officeRepository;
+
+    public OfficeService(OfficeRepository officeRepository) {
+        this.officeRepository = officeRepository;
+    }
+
+    public List<Office> findBasicAddress() {
+        return officeRepository.findBasicAddress();
+    }
 }

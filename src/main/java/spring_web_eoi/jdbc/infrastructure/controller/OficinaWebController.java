@@ -5,7 +5,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import spring_web_eoi.jdbc.application.OfficeService;
-import spring_web_eoi.jdbc.application.OfficeServiceImpl;
 import spring_web_eoi.jdbc.infrastructure.controller.model.OficinaBasicAddressDTO;
 import spring_web_eoi.jdbc.infrastructure.controller.model.OficinaDTO;
 import spring_web_eoi.jdbc.infrastructure.persistence.jdbc.OficinaRepository;
@@ -22,7 +21,7 @@ public class OficinaWebController {
 
     public OficinaWebController(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
-        this.officeService = new OfficeServiceImpl(new OficinaRepository(jdbcTemplate));
+        this.officeService = new OfficeService(new OficinaRepository(jdbcTemplate));
     }
 
     @GetMapping("/")

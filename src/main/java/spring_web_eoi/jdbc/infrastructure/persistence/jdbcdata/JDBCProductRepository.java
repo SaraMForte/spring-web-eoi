@@ -12,14 +12,10 @@ import spring_web_eoi.jdbc.infrastructure.persistence.jdbcdata.model.ProductoJDB
 import java.util.List;
 
 @Repository
-public interface JDBCProductRepository extends ListCrudRepository<ProductoJDBC, String>, ProductRepository {
-    /*
-    default List<Product> findAllProducts() {
-        return findAll().stream()
-                .map(ProductoJDBC::toDomain)
-                .toList();
-    }
-    */
+public interface JDBCProductRepository extends
+        ListCrudRepository<ProductoJDBC, String>,
+        ProductRepository
+{
 
     @Override
     @Query("""
