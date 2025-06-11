@@ -1,5 +1,6 @@
 package spring_web_eoi.jdbc.infrastructure.controller;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -98,5 +99,15 @@ public class ProductoWebController {
         redirectAttributes.addFlashAttribute("successMessage", "Producto guardado con exito -> ");
         redirectAttributes.addFlashAttribute("successLink", "/generic/product?id=" + producto.getCodigoProducto());
         return "redirect:/form/product/" + producto.getCodigoProducto();
+    }
+
+    @DeleteMapping("/form/product/{id}")
+    @ResponseBody
+    public ResponseEntity<Object> deleteProduct(
+            @PathVariable("id") String id
+    ) {
+        productService.deleteProduct(id);
+        System.out.println(id);
+        return ResponseEntity.ok("Product deleted successfully");
     }
 }

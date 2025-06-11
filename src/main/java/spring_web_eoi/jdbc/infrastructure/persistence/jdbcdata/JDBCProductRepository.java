@@ -102,4 +102,12 @@ public interface JDBCProductRepository extends ListCrudRepository<ProductoJDBC, 
                 codigo_producto = :#{#product.productCode}
             """)
     void updateProduct(Product product);
+
+    @Override
+    @Modifying
+    @Query("""
+            DELETE FROM producto
+            WHERE codigo_producto = :id
+            """)
+    void deleteProduct(@Param("id") String id);
 }
