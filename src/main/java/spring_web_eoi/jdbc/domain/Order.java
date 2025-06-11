@@ -1,12 +1,13 @@
 package spring_web_eoi.jdbc.domain;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class Order {
     private int orderCode;
-    private Date orderDate;
-    private Date expectedDate;
-    private Date deliveryDate;
+    private LocalDate orderDate;
+    private LocalDate expectedDate;
+    private LocalDate deliveryDate;
     private String status;
     private String comment;
     private int clientCode;
@@ -19,27 +20,27 @@ public class Order {
         this.orderCode = orderCode;
     }
 
-    public Date orderDate() {
+    public LocalDate orderDate() {
         return orderDate;
     }
 
-    public void setOrderDate(Date orderDate) {
+    public void setOrderDate(LocalDate orderDate) {
         this.orderDate = orderDate;
     }
 
-    public Date expectedDate() {
+    public LocalDate expectedDate() {
         return expectedDate;
     }
 
-    public void setExpectedDate(Date expectedDate) {
+    public void setExpectedDate(LocalDate expectedDate) {
         this.expectedDate = expectedDate;
     }
 
-    public Date deliveryDate() {
+    public LocalDate deliveryDate() {
         return deliveryDate;
     }
 
-    public void setDeliveryDate(Date deliveryDate) {
+    public void setDeliveryDate(LocalDate deliveryDate) {
         this.deliveryDate = deliveryDate;
     }
 
@@ -66,4 +67,5 @@ public class Order {
     public void setClientCode(int clientCode) {
         this.clientCode = clientCode;
     }
+
 }
