@@ -11,6 +11,7 @@ import spring_web_eoi.jdbc.domain.Client;
 import spring_web_eoi.jdbc.infrastructure.persistence.jdbcdata.model.ClienteJDBC;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface JDBCClientRepository extends
@@ -75,6 +76,10 @@ public interface JDBCClientRepository extends
                 codigo_empleado_rep_ventas AS employee_sales_representative_code,
                 limite_credito AS credit_limit
             FROM cliente
+            WHERE
+                activo = true
+            ORDER BY
+                codigo_cliente
             """)
     List<Client> findAllClients() throws DataOperationException;
 
@@ -99,7 +104,7 @@ public interface JDBCClientRepository extends
             WHERE
                 codigo_cliente = :id
             """)
-    Client findClientById(@Param("id") int id) throws DataOperationException;
+    Optional<Client> findClientById(@Param("id") int id) throws DataOperationException;
 
     @Override
     @Modifying
@@ -127,9 +132,11 @@ public interface JDBCClientRepository extends
     @Override
     @Modifying
     @Query("""
-            DELETE FROM cliente
+            UPDATE cliente
+            SET
+                activo = false
             WHERE
                 codigo_cliente = :id
             """)
-    void deleteClientById(int id) throws DataOperationException;
+    void deleteClientById(@Param("id") int id) throws DataOperationException;
 }

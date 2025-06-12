@@ -6,11 +6,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import spring_web_eoi.jdbc.application.ProductService;
-import spring_web_eoi.jdbc.domain.Product;
+import spring_web_eoi.jdbc.application.exception.DataDeleteException;
 import spring_web_eoi.jdbc.infrastructure.controller.model.ProductoDTO;
-import spring_web_eoi.jdbc.infrastructure.util.GenericTableGenerator;
+import spring_web_eoi.jdbc.infrastructure.util.GenericTableFactory;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,91 +22,77 @@ public class ProductoWebController {
         this.productService = productService;
     }
 
-    @GetMapping("/generic/product-all")
-    public String genericProducto(Model model) {
-        List<ProductoDTO> productos = productService.findAllProducts()
-                .stream()
-                .map(ProductoDTO::fromDomain)
-                .toList();
+    @GetMapping("form/product")
+    public String showFormProduct(
+            Model model,
+            @RequestParam(value = "id", required = false) Optional<String> id
+    ) {
+        ProductoDTO producto = new ProductoDTO();
 
-        model.addAttribute("table", new GenericTableGenerator<>(productos, ProductoDTO.class));
-        model.addAttribute("formUrl", "/form/product/");
-        return "index-generic";
-    }
-
-    @GetMapping("generic/product")
-    public String genericProductoById(@RequestParam(value = "id") String id, Model model) {
-        Optional<Product> productFind = productService.findProductById(id);
-        if (productFind.isEmpty()) {
-            return "redirect:/generic/product-all";
+        if (id.isPresent()) {
+            producto = productService.findById(id.get())
+                    .map(ProductoDTO::fromDomain)
+                    .orElseThrow();
         }
 
-        List<ProductoDTO> productos = new ArrayList<>();
-        productos.add(ProductoDTO.fromDomain(productFind.get()));
-        model.addAttribute("table", new GenericTableGenerator<>(productos, ProductoDTO.class));
-        model.addAttribute("formUrl", "/form/product/");
-        return "index-generic";
-    }
-
-    @GetMapping("/form/product")
-    public String formProducto(Model model) {
-        model.addAttribute("product", new ProductoDTO());
-        model.addAttribute("id", null);
-        return "form-product";
-    }
-
-    @GetMapping("/form/product/{id}")
-    public String formProducto(@PathVariable("id") String id, Model model) {
-        Optional<Product> productFind = productService.findProductById(id);
-        if (productFind.isEmpty()) {
-            model.addAttribute("product", new ProductoDTO());
-            model.addAttribute("id", id);
-            return "form-product";
-        }
-
-        ProductoDTO producto = ProductoDTO.fromDomain(productFind.get());
         model.addAttribute("product", producto);
         model.addAttribute("id", id);
         return "form-product";
     }
 
-    @PostMapping("/form/product/{id}")
-    public String updateProduct(
-            @ModelAttribute("product") ProductoDTO producto,
-            @PathVariable("id") String id,
-            RedirectAttributes redirectAttributes
-    ) {
-        productService.updateProduct(producto.toDomain());
-
-        redirectAttributes.addFlashAttribute("successMessage", "Producto actualizado con exito -> ");
-        redirectAttributes.addFlashAttribute("successLink", "/generic/product?id=" + producto.getCodigoProducto());
-        return "redirect:/form/product/" + id;
-    }
-
-    @PostMapping("/form/product")
-    public String saveProduct(
+    @PostMapping("form/product")
+    public String processFormProduct(
+            @RequestParam(value = "id", required = false) Optional<Integer> id,
             @ModelAttribute("product") ProductoDTO producto,
             RedirectAttributes redirectAttributes
     ) {
-        productService.saveProduct(producto.toDomain());
-
-        Optional<Product> productFind = productService.findProductById(producto.getCodigoProducto());
-        if (productFind.isEmpty()) {
-            return "redirect:/generic/product-all";
+        if (id.isPresent()) {
+            productService.update(producto.toDomain());
+            redirectAttributes.addFlashAttribute("successMessage", "Producto actualizado con exito -> ");
+        } else {
+            productService.save(producto.toDomain());
+            redirectAttributes.addFlashAttribute("successMessage", "Producto creado con exito -> ");
         }
 
-        redirectAttributes.addFlashAttribute("successMessage", "Producto guardado con exito -> ");
-        redirectAttributes.addFlashAttribute("successLink", "/generic/product?id=" + producto.getCodigoProducto());
-        return "redirect:/form/product/" + producto.getCodigoProducto();
+        redirectAttributes.addFlashAttribute("id", producto.getCodigoProducto());
+        redirectAttributes.addFlashAttribute("successLink", "/product?id=" + producto.getCodigoProducto());
+        return "redirect:/form/product";
     }
 
-    @DeleteMapping("/form/product/{id}")
-    @ResponseBody
-    public ResponseEntity<Object> deleteProduct(
-            @PathVariable("id") String id
+    @GetMapping("product")
+    public String showProducts(
+            Model model,
+            @RequestParam(value = "id", required = false) Optional<String> id
     ) {
-        productService.deleteProduct(id);
-        System.out.println(id);
-        return ResponseEntity.ok("Product deleted successfully");
+        List<ProductoDTO> productos;
+
+        if (id.isPresent()) {
+            productos = productService.findById(id.get())
+                    .map(ProductoDTO::fromDomain)
+                    .stream()
+                    .toList();
+        } else {
+            productos = productService.findAll()
+                    .stream()
+                    .map(ProductoDTO::fromDomain)
+                    .toList();
+        }
+
+        model.addAttribute("table", GenericTableFactory.create(productos, ProductoDTO.class));
+        model.addAttribute("formUrl", "/form/product");
+        model.addAttribute("deleteUrl", "product");
+        return "index-generic";
+    }
+
+    @DeleteMapping("product")
+    public ResponseEntity<String> deleteProduct(
+            @RequestParam(value = "id", required = true) String id
+    ) {
+        try {
+            productService.deleteById(id);
+            return ResponseEntity.ok("Product deleted successfully");
+        } catch (DataDeleteException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

@@ -11,6 +11,7 @@ public class GamaProductoJDBC {
     private String descripcionTexto;
     private String descripcionHtml;
     private String imagen;
+    private boolean activo;
 
     public String gama() {
         return gama;
@@ -42,6 +43,14 @@ public class GamaProductoJDBC {
 
     public void setImagen(String imagen) {
         this.imagen = imagen;
+    }
+
+    public boolean activo() {
+        return activo;
+    }
+
+    public void setActivo(boolean activo) {
+        this.activo = activo;
     }
 
     public ProductLine toDomain() {

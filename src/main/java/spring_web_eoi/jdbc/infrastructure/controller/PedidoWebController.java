@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import spring_web_eoi.jdbc.application.OrderService;
 import spring_web_eoi.jdbc.infrastructure.controller.model.PedidoDTO;
-import spring_web_eoi.jdbc.infrastructure.util.GenericTableGenerator;
+import spring_web_eoi.jdbc.infrastructure.util.GenericTableFactory;
 
 import java.util.List;
 import java.util.Optional;
@@ -77,7 +77,7 @@ public class PedidoWebController {
                     .toList();
         }
 
-        model.addAttribute("table", new GenericTableGenerator<>(pedidos, PedidoDTO.class));
+        model.addAttribute("table", GenericTableFactory.create(pedidos, PedidoDTO.class));
         model.addAttribute("formUrl", "/form/order");
         model.addAttribute("deleteUrl", "order");
         return "index-generic";

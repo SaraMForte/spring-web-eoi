@@ -15,23 +15,23 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    public List<Product> findAllProducts() {
+    public List<Product> findAll() {
         return productRepository.findAllProducts();
     }
 
-    public Optional<Product> findProductById(String id) {
+    public Optional<Product> findById(String id) {
         return Optional.ofNullable(productRepository.findProductById(id));
     }
 
-    public void saveProduct(Product product) {
+    public void save(Product product) {
         productRepository.saveProduct(product);
     }
 
-    public void updateProduct(Product product) {
+    public void update(Product product) {
         productRepository.updateProduct(product);
     }
 
-    public void deleteProduct(String id) {
+    public void deleteById(String id) {
         productRepository.deleteProduct(id);
     }
 }

@@ -4,6 +4,7 @@ import spring_web_eoi.jdbc.application.exception.DataOperationException;
 import spring_web_eoi.jdbc.domain.Client;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ClientRepository {
 
@@ -11,7 +12,7 @@ public interface ClientRepository {
 
     List<Client> findAllClients() throws DataOperationException;
 
-    Client findClientById(int id) throws DataOperationException;
+    Optional<Client> findClientById(int id) throws DataOperationException;
 
     void updateClient(Client client) throws DataOperationException;
 

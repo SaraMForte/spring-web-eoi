@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import spring_web_eoi.jdbc.application.EmployeeService;
 import spring_web_eoi.jdbc.infrastructure.controller.model.EmpleadoDetalleVentasPorGamaDTO;
 import spring_web_eoi.jdbc.infrastructure.persistence.jdbc.EmpleadoRepository;
-import spring_web_eoi.jdbc.infrastructure.util.GenericTableGenerator;
+import spring_web_eoi.jdbc.infrastructure.util.GenericTableFactory;
 
 import java.util.List;
 
@@ -30,7 +30,7 @@ public class EmpleadoWebController {
                 .map(entry -> EmpleadoDetalleVentasPorGamaDTO.fromEmpleadoDetalleVentasPorGama(entry.getKey(), entry.getValue()))
                 .toList();
 
-        model.addAttribute("table", new GenericTableGenerator<>(
+        model.addAttribute("table", GenericTableFactory.create(
                         empleadoDetalleVentasPorGama,
                         EmpleadoDetalleVentasPorGamaDTO.class
                 )

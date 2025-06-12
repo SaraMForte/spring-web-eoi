@@ -3,10 +3,8 @@ package spring_web_eoi.jdbc.infrastructure.persistence.jdbcdata.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 import spring_web_eoi.jdbc.domain.Order;
-import spring_web_eoi.jdbc.infrastructure.controller.model.PedidoDTO;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @Table("pedido")
 public class PedidoJDBC {
@@ -19,6 +17,7 @@ public class PedidoJDBC {
     private String estado;
     private String comentarios;
     private int codigoCliente;
+    private boolean activo;
 
     public int codigoPedido() {
         return codigoPedido;
@@ -74,6 +73,14 @@ public class PedidoJDBC {
 
     public void setCodigoCliente(int codigoCliente) {
         this.codigoCliente = codigoCliente;
+    }
+
+    public boolean activo() {
+        return activo;
+    }
+
+    public void setActivo(boolean activo) {
+        this.activo = activo;
     }
 
     public static PedidoJDBC fromDomain(Order order) {

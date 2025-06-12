@@ -57,6 +57,21 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
+        #delete-popover {
+            padding: 10px 15px;
+            background-color: #d32f2f;
+            color: white;
+            border-radius: 6px;
+            font-size: 14px;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 9999;
+            margin: 0.25rem;
+            border: 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
         #confirm-dialog {
             background: white;
             border: 0;
@@ -104,7 +119,7 @@
 </head>
 <body>
 
-<h1>Lista de datos básicos de las Oficinas</h1>
+<h1>Lista de datos</h1>
 
 <table>
 
@@ -123,9 +138,9 @@
             th:text="${cell}"
         ></td>
         <td th:if="${!formUrl.isEmpty() || !deleteUrl.isEmpty()}">
-            <a th:if="${formUrl}"
-               class="action-btn-edit"
-               th:href="${formUrl} + '?id=' + ${row.get(0)}">
+            <a class="action-btn-edit"
+               th:href="${formUrl} + '?id=' + ${row.get(0)}"
+               th:if="${formUrl}">
                 <svg class="icon icon-tabler icons-tabler-outline icon-tabler-edit" fill="none" height="24"
                      stroke="currentColor" stroke-linecap="round"
                      stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24"
@@ -136,11 +151,11 @@
                     <path d="M16 5l3 3"/>
                 </svg>
             </a>
-            <button th:if="${deleteUrl}"
-                    class="action-btn-delete"
+            <button class="action-btn-delete"
                     onclick="showConfirmation(this)"
                     th:data-cell-url="${deleteUrl}"
-                    th:data-row-id="${row.get(0)}">
+                    th:data-row-id="${row.get(0)}"
+                    th:if="${deleteUrl}">
                 <svg class="icon icon-tabler icons-tabler-outline icon-tabler-trash" fill="none"
                      height="24"
                      stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -170,6 +185,10 @@
         ¡Texto copiado al portapapeles!
     </div>
 
+    <div id="delete-popover" popover>
+        No se ha podido eliminar
+    </div>
+
 </table>
 <script>
     function showConfirmation(element) {
@@ -192,13 +211,29 @@
 
         fetch(`${url}?id=${id}`, {
             method: 'DELETE'
-        }).then((res) => {
+        }).then(async (res) => {
             if (res.ok) {
                 window.location.href = url
             } else {
-                console.error('Cant delete product');
+                console.error('Cant delete element');
+                const popover = document.getElementById('delete-popover');
+                popover.textContent = "Error: " + (await res.text());
+                popover.showPopover();
+
+                setTimeout(() => {
+                    popover.hidePopover();
+                }, 2500);
             }
-        })
+        }).catch((err) => {
+            console.error('Network error', err);
+            const popover = document.getElementById('delete-popover');
+            popover.textContent = 'Network error';
+            popover.showPopover();
+
+            setTimeout(() => {
+                popover.hidePopover();
+            }, 4000);
+        });
     }
 
     function copyText(element) {

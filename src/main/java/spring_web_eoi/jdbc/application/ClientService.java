@@ -1,15 +1,21 @@
 package spring_web_eoi.jdbc.application;
 
+import spring_web_eoi.jdbc.application.exception.DataDeleteException;
 import spring_web_eoi.jdbc.domain.Client;
 
 import java.util.List;
+import java.util.Optional;
 
 public class ClientService {
 
-    ClientRepository clientRepository;
+    private final ClientRepository clientRepository;
+    private final OrderRepository orderRepository;
+    private final ClientDeleteUseCase clientDeleteUseCase;
 
-    public ClientService(ClientRepository clientRepository) {
+    public ClientService(ClientRepository clientRepository, OrderRepository orderRepository) {
         this.clientRepository = clientRepository;
+        this.orderRepository = orderRepository;
+        this.clientDeleteUseCase = new ClientDeleteUseCase(clientRepository, orderRepository);
     }
 
     public void save(Client client) {
@@ -20,7 +26,7 @@ public class ClientService {
         return clientRepository.findAllClients();
     }
 
-    public Client findById(int id) {
+    public Optional<Client> findById(int id) {
         return clientRepository.findClientById(id);
     }
 
@@ -29,7 +35,7 @@ public class ClientService {
         clientRepository.updateClient(client);
     }
 
-    public void deleteById(int id) {
-        clientRepository.deleteClientById(id);
+    public void deleteById(int id) throws DataDeleteException {
+        clientDeleteUseCase.deleteClient(id);
     }
 }

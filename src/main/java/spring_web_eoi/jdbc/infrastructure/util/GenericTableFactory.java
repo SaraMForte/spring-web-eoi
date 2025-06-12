@@ -8,27 +8,27 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class GenericTableGenerator<T> {
-    private final List<String> columns;
-    private final List<List<String>> rows;
+public class GenericTableFactory {
 
-    public GenericTableGenerator(List<T> entities, Class<T> entityType) {
+    public static <T> GenericTable<T> create(List<T> entities, Class<T> entityType) {
         try {
-            columns = generateColumns(entityType);
-            rows = generateRows(entities, entityType);
+            List<String> columns = generateColumns(entityType);
+            List<List<String>> rows = generateRows(entities, entityType);
+            return new GenericTable<>(columns, rows);
         } catch (IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private List<String> generateColumns(Class<T> entityType) {
+    private static <T> List<String> generateColumns(Class<T> entityType) {
         return (Arrays.stream(entityType.getDeclaredFields())
                 .map(Field::getName)
                 .toList()
         );
     }
 
-    private List<List<String>> generateRows(List<T> entities, Class<T> entityType) throws IllegalAccessException, InvocationTargetException {
+    private static <T> List<List<String>> generateRows(List<T> entities, Class<T> entityType) throws IllegalAccessException,
+            InvocationTargetException {
         List<List<String>> rowsList = new ArrayList<>();
         for (T entity : entities) {
             if (entityType.isRecord()) {
@@ -41,7 +41,7 @@ public class GenericTableGenerator<T> {
     }
 
     //TODO - Cambiar el desarrollo para evitar cambiar la visibilidad de los atributos de la clase
-    private List<String> generateRow(T entity, Class<T> entityType) throws IllegalAccessException {
+    private static <T> List<String> generateRow(T entity, Class<T> entityType) throws IllegalAccessException {
         List<String> row = new ArrayList<>();
         for (Field field : entityType.getDeclaredFields()) {
             field.setAccessible(true);
@@ -50,7 +50,8 @@ public class GenericTableGenerator<T> {
         return row;
     }
 
-    private List<String> generateRowByRecord(T entity, Class<T> entityType) throws IllegalAccessException, InvocationTargetException {
+    private static <T> List<String> generateRowByRecord(T entity, Class<T> entityType) throws IllegalAccessException,
+            InvocationTargetException {
         List<String> row = new ArrayList<>();
         for (RecordComponent component : entityType.getRecordComponents()) {
             Method accessor = component.getAccessor();
@@ -60,11 +61,12 @@ public class GenericTableGenerator<T> {
         return row;
     }
 
-    public List<String> columns() {
-        return columns;
-    }
-
-    public List<List<String>> rows() {
-        return rows;
-    }
+    /*    public GenericTableFactory(List<T> entities, Class<T> entityType) {
+        try {
+            columns = generateColumns(entityType);
+            rows = generateRows(entities, entityType);
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            throw new RuntimeException(e);
+        }
+    }*/
 }

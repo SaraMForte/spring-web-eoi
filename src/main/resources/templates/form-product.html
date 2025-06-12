@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>Formulario Producto</title>
     <style>
         body {
@@ -118,118 +118,119 @@
 </head>
 <body>
 <div class="container">
-    <h2 th:text="${product.isEmpty() && id == null} ? 'Registar Producto' : 'Editar Producto'">Formulario de
-        Producto</h2>
+    <h2 th:text="${id.isEmpty()} ? 'Registar Producto' : 'Editar Producto'">
+        Formulario de Cliente
+    </h2>
 
-    <div th:if="${product.isEmpty() && id != null}" class="alert alert-danger" role="alert">
+    <!--  <div th:if="${product.isEmpty() && id != null}" class="alert alert-danger" role="alert">
         No existe el producto con el id: <b th:text="${id}"></b>
-    </div>
+      </div>-->
 
-    <div th:if="${successMessage}" class="alert alert-success" role="alert">
+    <div class="alert alert-success" role="alert" th:if="${successMessage}">
         <span th:text="${successMessage}"></span><a th:href="${successLink}">Ver</a>
     </div>
 
     <form method="post"
-          th:if="${id != null}"
-          th:action="@{/form/product/{id}(id=${id})}"
+          th:action="@{'/form/product?id=' + ${id.get()}}"
+          th:if="${id.isPresent()}"
           th:object="${product}">
         <div class="form-group">
             <label th:for="*{codigoProducto}">Código del Producto</label>
-            <input type="text" th:field="*{codigoProducto}" required />
+            <input required th:field="*{codigoProducto}" type="text"/>
         </div>
 
         <div class="form-group">
             <label th:for="*{nombre}">Nombre</label>
-            <input type="text" th:field="*{nombre}" required />
+            <input required th:field="*{nombre}" type="text"/>
         </div>
 
         <div class="form-group">
             <label th:for="*{gama}">Gama</label>
-            <input type="text" th:field="*{gama}" />
+            <input th:field="*{gama}" type="text"/>
         </div>
 
         <div class="form-group">
             <label th:for="*{dimensiones}">Dimensiones</label>
-            <input type="text" th:field="*{dimensiones}" />
+            <input th:field="*{dimensiones}" type="text"/>
         </div>
 
         <div class="form-group">
             <label th:for="*{proveedor}">Proveedor</label>
-            <input type="text" th:field="*{proveedor}" />
+            <input th:field="*{proveedor}" type="text"/>
         </div>
 
         <div class="form-group full-width">
             <label th:for="*{descripcion}">Descripción</label>
-            <textarea th:field="*{descripcion}" rows="3"></textarea>
+            <textarea rows="3" th:field="*{descripcion}"></textarea>
         </div>
 
         <div class="form-group">
             <label th:for="*{cantidadEnStock}">Cantidad en Stock</label>
-            <input type="number" th:field="*{cantidadEnStock}" required />
+            <input required th:field="*{cantidadEnStock}" type="number"/>
         </div>
 
         <div class="form-group">
             <label th:for="*{precioVenta}">Precio de Venta</label>
-            <input type="number" step="0.01" th:field="*{precioVenta}" required />
+            <input required step="0.01" th:field="*{precioVenta}" type="number"/>
         </div>
 
         <div class="form-group">
             <label th:for="*{precioProveedor}">Precio del Proveedor</label>
-            <input type="number" step="0.01" th:field="*{precioProveedor}" required />
+            <input required step="0.01" th:field="*{precioProveedor}" type="number"/>
         </div>
 
         <div class="form-actions">
-            <button type="submit">Guardar Producto</button>
+            <button type="submit">Actualizar Producto</button>
         </div>
     </form>
 
     <form method="post"
-          th:if="${id == null}"
           th:action="@{/form/product}"
+          th:if="${id.isEmpty()}"
           th:object="${product}">
         <div class="form-group">
             <label th:for="*{codigoProducto}">Código del Producto</label>
-            <input type="text" th:field="*{codigoProducto}" required />
+            <input required th:field="*{codigoProducto}" type="text"/>
         </div>
 
         <div class="form-group">
             <label th:for="*{nombre}">Nombre</label>
-            <input type="text" th:field="*{nombre}" required />
+            <input required th:field="*{nombre}" type="text"/>
         </div>
 
         <div class="form-group">
             <label th:for="*{gama}">Gama</label>
-            <input type="text" th:field="*{gama}" />
+            <input th:field="*{gama}" type="text"/>
         </div>
 
         <div class="form-group">
             <label th:for="*{dimensiones}">Dimensiones</label>
-            <input type="text" th:field="*{dimensiones}" />
+            <input th:field="*{dimensiones}" type="text"/>
         </div>
 
         <div class="form-group">
             <label th:for="*{proveedor}">Proveedor</label>
-            <input type="text" th:field="*{proveedor}" />
+            <input th:field="*{proveedor}" type="text"/>
         </div>
 
         <div class="form-group full-width">
             <label th:for="*{descripcion}">Descripción</label>
-            <textarea th:field="*{descripcion}" rows="3"></textarea>
+            <textarea rows="3" th:field="*{descripcion}"></textarea>
         </div>
 
         <div class="form-group">
             <label th:for="*{cantidadEnStock}">Cantidad en Stock</label>
-            <input type="number" th:field="*{cantidadEnStock}" required />
+            <input required th:field="*{cantidadEnStock}" type="number"/>
         </div>
 
         <div class="form-group">
             <label th:for="*{precioVenta}">Precio de Venta</label>
-            <input type="number" step="0.01" th:field="*{precioVenta}" required />
+            <input required step="0.01" th:field="*{precioVenta}" type="number"/>
         </div>
 
         <div class="form-group">
             <label th:for="*{precioProveedor}">Precio del Proveedor</label>
-            <input type="number" step="0.01" th:field="*{precioProveedor}" required />
+            <input required step="0.01" th:field="*{precioProveedor}" type="number"/>
         </div>
 
         <div class="form-actions">

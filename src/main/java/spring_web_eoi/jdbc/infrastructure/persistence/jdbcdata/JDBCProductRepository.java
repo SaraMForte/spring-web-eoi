@@ -30,6 +30,8 @@ public interface JDBCProductRepository extends
                 precio_venta AS "sale_price",
                 precio_proveedor AS "supplier_price"
             FROM producto
+            WHERE
+                activo = true
             """)
     List<Product> findAllProducts();
 
@@ -102,8 +104,11 @@ public interface JDBCProductRepository extends
     @Override
     @Modifying
     @Query("""
-            DELETE FROM producto
-            WHERE codigo_producto = :id
+            UPDATE producto
+            SET
+                activo = false
+            WHERE
+                codigo_producto = :id
             """)
     void deleteProduct(@Param("id") String id);
 }

@@ -2,22 +2,22 @@
 
 ## Enunciado
 Para la BBDD `Jardineria`, completar el proyecto en curso con estas funcionalidades:
-* CRUD de clientes
-* CRUD de pedidos (y sus líneas)
-* CRUD de gamas de producto.
+* ~~CRUD de clientes~~
+* ~~CRUD de pedidos (y sus líneas)~~
+* ~~CRUD de gamas de producto.~~
 
 Se utilizará 
 * Spring Data JDBC.
-* Bootstrap 5.3.
+* ~~Bootstrap 5.3.~~
 * Thymeleaf
 * PostgreSql
 
 Teniendo en cuenta que:
-1. Se utilizará **_borrado lógico_**
-2. En los listados de cualquier tipo, no se incluirán los registros marcados como borrados.
-3. Un cliente no se puede borrar si tiene pedidos.
+1. ~~Se utilizará **_borrado lógico_**~~
+2. ~~En los listados de cualquier tipo, no se incluirán los registros marcados como borrados.~~
+3. ~~Un cliente no se puede borrar si tiene pedidos.~~
 4. Un pedido no se puede borrar si tiene productos vendidos.
-5. Si se borra una gama, se debe borrar de todos los productos que la referencien.
+5. ~~Si se borra una gama, se debe borrar de todos los productos que la referencien.~~
 6. El formulario de cliente (alta o modificación) presentará una lista con nombre y apellidos de los posibles 
 representantes de ventas para poder seleccionar uno.
 7. Un cliente puede haber realizado varios pedidos, pero un pedido sólo puede haber sido hecho por un cliente.
@@ -31,15 +31,15 @@ total (suma de ambos);
 
 ## Hitos (entregables)
 1. Listado de clientes (no son necesarios todos los campos. Usad un conjunto elegido por vosotros).
-2. Listado de gamas.
+2. ~~Listado de gamas.~~
 3. Listado de pedidos (sin las líneas) incluyendo la base imponible del pedido, la cantidad de IVA y el total.
-4. Formulario de gamas (alta y modificación)
-5. Borrado de gamas con confirmación del borrado por parte del usuario.
-6. Formulario de clientes (alta y modificación)
-7. Borrado de clientes (con confirmación).
+4. ~~Formulario de gamas (alta y modificación)~~
+5. ~~Borrado de gamas con confirmación del borrado por parte del usuario.~~
+6. ~~Formulario de clientes (alta y modificación)~~
+7. ~~Borrado de clientes (con confirmación).~~
 8. Formulario de pedidos incluyendo las líneas. Cada una permitirá (mediante iconos de acción) editar sus datos o 
 ser borrada.
-9. Borrado de pedidos.
+9. ~~Borrado de pedidos.~~
 10. Listado de pedidos de un cliente indicado por el usuario
 11. Listado de productos por gama.
 

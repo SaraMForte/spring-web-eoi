@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import spring_web_eoi.jdbc.application.ProductLineService;
 import spring_web_eoi.jdbc.infrastructure.controller.model.GamaProductoDTO;
-import spring_web_eoi.jdbc.infrastructure.util.GenericTableGenerator;
+import spring_web_eoi.jdbc.infrastructure.util.GenericTableFactory;
 
 import java.util.List;
 import java.util.Optional;
@@ -77,7 +77,7 @@ public class GamaProductoWebController {
                     .toList();
         }
 
-        model.addAttribute("table", new GenericTableGenerator<>(pedidos, GamaProductoDTO.class));
+        model.addAttribute("table", GenericTableFactory.create(pedidos, GamaProductoDTO.class));
         model.addAttribute("formUrl", "/form/product-line");
         model.addAttribute("deleteUrl", "product-line");
         return "index-generic";

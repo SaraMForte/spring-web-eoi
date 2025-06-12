@@ -8,9 +8,13 @@ import java.util.Optional;
 public class ProductLineService {
 
     ProductLineRepository productLineRepository;
+    ProductRepository productRepository;
+    ProductLineDeleteUseCase productLineDeleteUseCase;
 
-    public ProductLineService(ProductLineRepository productLineRepository) {
+    public ProductLineService(ProductLineRepository productLineRepository, ProductRepository productRepository) {
         this.productLineRepository = productLineRepository;
+        this.productRepository = productRepository;
+        this.productLineDeleteUseCase = new ProductLineDeleteUseCase(productLineRepository, productRepository);
     }
 
     public List<ProductLine> findAll() {
@@ -30,6 +34,6 @@ public class ProductLineService {
     }
 
     public void deleteById(String id) {
-        productLineRepository.deleteProductLine(id);
+        productLineDeleteUseCase.deleteProductLine(id);
     }
 }

@@ -1,16 +1,15 @@
 package spring_web_eoi.jdbc.infrastructure.controller;
 
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import spring_web_eoi.jdbc.application.ClientService;
+import spring_web_eoi.jdbc.application.exception.DataDeleteException;
 import spring_web_eoi.jdbc.infrastructure.controller.model.ClienteDTO;
-import spring_web_eoi.jdbc.infrastructure.util.GenericTableGenerator;
+import spring_web_eoi.jdbc.infrastructure.util.GenericTableFactory;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,7 +30,9 @@ public class ClienteWebController {
         ClienteDTO clienteDTO = new ClienteDTO();
 
         if (id.isPresent()) {
-            clienteDTO = ClienteDTO.fromDomain(clientService.findById(id.get()));
+            clienteDTO = clientService.findById(id.get())
+                    .map(ClienteDTO::fromDomain)
+                    .orElseThrow();
         }
 
         model.addAttribute("client", clienteDTO);
@@ -64,11 +65,13 @@ public class ClienteWebController {
             Model model,
             @RequestParam(value = "id", required = false) Optional<Integer> id
     ) {
-        List<ClienteDTO> clientes = new ArrayList<>();
+        List<ClienteDTO> clientes;
 
         if (id.isPresent()) {
-            ClienteDTO clienteDTO = ClienteDTO.fromDomain(clientService.findById(id.get()));
-            clientes.add(clienteDTO);
+            clientes = clientService.findById(id.get())
+                    .map(ClienteDTO::fromDomain)
+                    .stream()
+                    .toList();
         } else {
             clientes = clientService.findAll()
                     .stream()
@@ -76,7 +79,7 @@ public class ClienteWebController {
                     .toList();
         }
 
-        model.addAttribute("table", new GenericTableGenerator<>(clientes, ClienteDTO.class));
+        model.addAttribute("table", GenericTableFactory.create(clientes, ClienteDTO.class));
         model.addAttribute("formUrl", "/form/client");
         model.addAttribute("deleteUrl", "client");
         return "index-generic";
@@ -86,7 +89,11 @@ public class ClienteWebController {
     public ResponseEntity<String> deleteClient(
             @RequestParam(value = "id", required = true) int id
     ) {
-        clientService.deleteById(id);
-        return ResponseEntity.ok("Client deleted successfully");
+        try {
+            clientService.deleteById(id);
+            return ResponseEntity.ok("Client deleted successfully");
+        } catch (DataDeleteException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

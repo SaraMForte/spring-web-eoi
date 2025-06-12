@@ -3,12 +3,14 @@ package spring_web_eoi.jdbc.infrastructure.persistence.jdbcdata;
 import org.springframework.data.jdbc.repository.query.Modifying;
 import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.ListCrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import spring_web_eoi.jdbc.application.OrderRepository;
 import spring_web_eoi.jdbc.application.exception.DataOperationException;
 import spring_web_eoi.jdbc.domain.Order;
 import spring_web_eoi.jdbc.infrastructure.persistence.jdbcdata.model.PedidoJDBC;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,9 +18,15 @@ import java.util.Optional;
 public interface JDBCOrderRepository extends ListCrudRepository<PedidoJDBC, Integer>, OrderRepository {
 
     @Override
-    default void deleteOrderById(int id) throws DataOperationException {
-        deleteById(id);
-    }
+    @Modifying
+    @Query("""
+            UPDATE pedido
+            SET
+                activo = false
+            WHERE
+                codigo_pedido = :id
+            """)
+    void deleteOrderById(@Param("id") int id) throws DataOperationException;
 
     @Override
     default void updateOrder(Order order) throws DataOperationException {
@@ -33,6 +41,8 @@ public interface JDBCOrderRepository extends ListCrudRepository<PedidoJDBC, Inte
     @Override
     default List<Order> findAllOrders() throws DataOperationException {
         return findAll().stream()
+                .filter(PedidoJDBC::activo)
+                .sorted(Comparator.comparingInt(PedidoJDBC::codigoPedido))
                 .map(PedidoJDBC::toDomain)
                 .toList();
     }
