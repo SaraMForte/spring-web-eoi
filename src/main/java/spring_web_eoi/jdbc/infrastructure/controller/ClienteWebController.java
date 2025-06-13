@@ -8,7 +8,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import spring_web_eoi.jdbc.application.ClientService;
 import spring_web_eoi.jdbc.application.exception.DataDeleteException;
 import spring_web_eoi.jdbc.infrastructure.controller.model.ClienteDTO;
-import spring_web_eoi.jdbc.infrastructure.util.GenericTableFactory;
+import spring_web_eoi.jdbc.infrastructure.util.generictable.GenericTableFactory;
 
 import java.util.List;
 import java.util.Optional;
@@ -46,7 +46,6 @@ public class ClienteWebController {
             @ModelAttribute("client") ClienteDTO clienteDTO,
             RedirectAttributes redirectAttributes
     ) {
-        System.out.println(clienteDTO);
         if (id.isPresent()) {
             clientService.update(clienteDTO.toDomain());
             redirectAttributes.addFlashAttribute("successMessage", "Cliente actualizado con exito -> ");

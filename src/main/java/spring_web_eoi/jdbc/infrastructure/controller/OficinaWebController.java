@@ -8,7 +8,7 @@ import spring_web_eoi.jdbc.application.OfficeService;
 import spring_web_eoi.jdbc.infrastructure.controller.model.OficinaBasicAddressDTO;
 import spring_web_eoi.jdbc.infrastructure.controller.model.OficinaDTO;
 import spring_web_eoi.jdbc.infrastructure.persistence.jdbc.OficinaRepository;
-import spring_web_eoi.jdbc.infrastructure.util.GenericTableFactory;
+import spring_web_eoi.jdbc.infrastructure.util.generictable.GenericTableFactory;
 
 import java.util.List;
 import java.util.Map;

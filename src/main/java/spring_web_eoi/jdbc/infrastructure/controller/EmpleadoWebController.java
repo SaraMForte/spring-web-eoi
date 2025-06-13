@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import spring_web_eoi.jdbc.application.EmployeeService;
 import spring_web_eoi.jdbc.infrastructure.controller.model.EmpleadoDetalleVentasPorGamaDTO;
 import spring_web_eoi.jdbc.infrastructure.persistence.jdbc.EmpleadoRepository;
-import spring_web_eoi.jdbc.infrastructure.util.GenericTableFactory;
+import spring_web_eoi.jdbc.infrastructure.util.generictable.GenericTableFactory;
 
 import java.util.List;
 

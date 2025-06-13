@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import spring_web_eoi.jdbc.application.OrderService;
 import spring_web_eoi.jdbc.infrastructure.controller.model.PedidoDTO;
-import spring_web_eoi.jdbc.infrastructure.util.GenericTableFactory;
+import spring_web_eoi.jdbc.infrastructure.util.generictable.GenericTableFactory;
 
 import java.util.List;
 import java.util.Optional;

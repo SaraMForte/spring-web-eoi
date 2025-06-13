@@ -8,7 +8,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import spring_web_eoi.jdbc.application.ProductService;
 import spring_web_eoi.jdbc.application.exception.DataDeleteException;
 import spring_web_eoi.jdbc.infrastructure.controller.model.ProductoDTO;
-import spring_web_eoi.jdbc.infrastructure.util.GenericTableFactory;
+import spring_web_eoi.jdbc.infrastructure.util.generictable.GenericTableFactory;
 
 import java.util.List;
 import java.util.Optional;

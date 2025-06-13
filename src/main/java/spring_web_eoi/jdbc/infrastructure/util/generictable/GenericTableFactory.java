@@ -1,4 +1,4 @@
-package spring_web_eoi.jdbc.infrastructure.util;
+package spring_web_eoi.jdbc.infrastructure.util.generictable;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -10,11 +10,14 @@ import java.util.List;
 
 public class GenericTableFactory {
 
-    public static <T> GenericTable<T> create(List<T> entities, Class<T> entityType) {
+    private GenericTableFactory() {
+    }
+
+    public static <T> GenericTable create(List<T> entities, Class<T> entityType) {
         try {
             List<String> columns = generateColumns(entityType);
             List<List<String>> rows = generateRows(entities, entityType);
-            return new GenericTable<>(columns, rows);
+            return new GenericTable(columns, rows);
         } catch (IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
@@ -60,13 +63,4 @@ public class GenericTableFactory {
         }
         return row;
     }
-
-    /*    public GenericTableFactory(List<T> entities, Class<T> entityType) {
-        try {
-            columns = generateColumns(entityType);
-            rows = generateRows(entities, entityType);
-        } catch (IllegalAccessException | InvocationTargetException e) {
-            throw new RuntimeException(e);
-        }
-    }*/
 }
